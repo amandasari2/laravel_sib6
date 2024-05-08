@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('front.home');
 });
 
 Route::get('/percobaan_pertama', function () {
@@ -24,3 +28,9 @@ Route::get('/daftar_nilai', function () {
     // Return view yang mengarahkan ke dalam view yang di dalamnya ada folder nilai dan file daftar_nilai
     return view('nilai.daftar_nilai');
 });
+
+Route::get('/dashboard',function(){
+    return view('admin.dashboard');
+});
+
+
