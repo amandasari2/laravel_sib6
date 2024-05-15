@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\HTTP\Controllers\JenisProdukController;
+use App\HTTP\Controllers\ProdukController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -31,6 +33,16 @@ Route::get('/daftar_nilai', function () {
 
 Route::get('/dashboard',function(){
     return view('admin.dashboard');
+});
+
+// prefix and gruoping adalah mengelompokkan routing ke satu jenis route
+Route::prefix('admin')->group(function(){
+// Route memanggil controller setiap fungsi
+// nanti linknya menggunakan url, ada di dalam view
+Route::get('/jenis_produk', [JenisProdukController::class, 'index']);
+
+// rute dengan pemanggilan class
+Route::resource('produk', ProdukController::class);
 });
 
 
