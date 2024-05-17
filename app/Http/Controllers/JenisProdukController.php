@@ -40,7 +40,13 @@ class JenisProdukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Menambahkan data menggunakan Query Builder
+        DB::table('jenis_produk')->insert([
+            'nama' => $request->nama,
+        ]);
+        // return view mengarahkan ke file sebelum proses atau akan diproses
+        // return redirect mengarahkan ke file setelah diproses
+        return redirect('admin/jenis_produk');
     }
 
     /**

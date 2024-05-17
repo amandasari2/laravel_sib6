@@ -30,6 +30,8 @@ class ProdukController extends Controller
     public function create()
     {
         //
+        $jenis_produk = DB::table('jenis_produk')->get();
+        return view('admin.produk.create',compact('jenis_produk'));
     }
 
     /**
@@ -37,7 +39,17 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Tambah Data Produk
+        DB::table('produk')->insert([
+            'kode' =>$request->kode,
+            'nama' =>$request->nama,
+            'harga_jual' =>$request->harga_jual,
+            'harga_beli' =>$request->harga_beli,
+            'stok' =>$request->stok,
+            'min_stok' =>$request->min_stok,
+            'jenis_produk_id' =>$request->jenis_produk_id,
+        ]);
+        return redirect('admin/produk');
     }
 
     /**
@@ -46,6 +58,12 @@ class ProdukController extends Controller
     public function show(string $id)
     {
         //
+        $produk = Produk::join('jenis_produk', 'jenis_produk_id', '=', 'jenis_produk.id')
+        ->select('produk.*','jenis_produk.nama as jenis')
+        ->where('produk.id',$id)
+        ->get();
+
+        return view('admin.produk.detail',compact('produk'));
     }
 
     /**

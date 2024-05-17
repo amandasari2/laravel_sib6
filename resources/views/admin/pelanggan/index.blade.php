@@ -2,14 +2,14 @@
 @section('konten')
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Produk</h1>
+    <h1 class="mt-4">Pelanggan</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
         <li class="breadcrumb-item active">Tables</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <a href="{{ route('produk.create') }}" class="btn btn-lg btn-primary"><i
+            <a href="{{ route('pelanggan.create') }}" class="btn btn-lg btn-primary"><i
                 class="fa-solid fa-square-plus"></i></a>
         </div>
         <div class="card-body">
@@ -19,12 +19,11 @@
                         <th>No</th>
                         <th>Kode</th>
                         <th>Nama</th>
-                        <th>Harga Beli</th>
-                        <th>Harga Jual</th>
-                        <th>Stok</th>
-                        <th>Minimal Stok</th>
-                        <th>Jenis Produk</th>
-                        <th>Action</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Email</th>
+                        <th>Kartu</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -32,29 +31,25 @@
                         <th>No</th>
                         <th>Kode</th>
                         <th>Nama</th>
-                        <th>Harga Beli</th>
-                        <th>Harga Jual</th>
-                        <th>Stok</th>
-                        <th>Minimal Stok</th>
-                        <th>Jenis Produk</th>
-                        <th>Action</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Email</th>
+                        <th>Kartu</th>
                     </tr>
                 </tfoot>
                 <tbody>
                     @php $no=1 @endphp
-                    @foreach($produk as $p)
+                    @foreach($pelanggan as $p)
                     <tr>
                         <td>{{ $no++ }}</td>
                         <td>{{ $p -> kode }}</td>
                         <td>{{ $p -> nama }}</td>
-                        <td>{{ $p -> harga_beli }}</td>
-                        <td>{{ $p -> harga_jual }}</td>
-                        <td>{{ $p -> stok }}</td>
-                        <td>{{ $p -> min_stok }}</td>
-                        <td>{{ $p -> jenis }}</td>
-                        <td>
-                            <a href="{{ route('produk.show', $p->id) }}" class="btn btn-sm btn-primary">Details</a>
-                        </td>
+                        <td>{{ $p -> jk }}</td>
+                        <td>{{ $p -> tmp_lahir }}</td>
+                        <td>{{ $p -> tgl_lahir }}</td>
+                        <td>{{ $p -> email }}</td>
+                        <td>{{ $p -> kartu -> nama }}</td>
                     </tr>
                    @endforeach
                 </tbody>
