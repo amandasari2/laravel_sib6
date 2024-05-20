@@ -53,7 +53,7 @@
                         <td>{{ $p -> min_stok }}</td>
                         <td>{{ $p -> jenis }}</td>
                         <td>
-                            <a href="{{ route('produk.show', $p->id) }}" class="btn btn-sm btn-primary">Details</a>
+                            <a href="{{ route('produk.show', $p->id) }}" class="btn btn-sm btn-primary"><i class="fa-solid fa-eye"></i></a>
                         </td>
                     </tr>
                    @endforeach

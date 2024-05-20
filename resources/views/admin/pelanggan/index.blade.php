@@ -24,6 +24,7 @@
                         <th>Tanggal Lahir</th>
                         <th>Email</th>
                         <th>Kartu</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -36,6 +37,7 @@
                         <th>Tanggal Lahir</th>
                         <th>Email</th>
                         <th>Kartu</th>
+                        <th>Action</th>
                     </tr>
                 </tfoot>
                 <tbody>
@@ -50,6 +52,11 @@
                         <td>{{ $p -> tgl_lahir }}</td>
                         <td>{{ $p -> email }}</td>
                         <td>{{ $p -> kartu -> nama }}</td>
+                        <td>
+                            <a href="{{route('pelanggan.show', $p->id)}}" 
+                            class="btn btn-sm btn-success">
+                            <i class="fa-solid fa-eye"></i></a>
+                                </td>
                     </tr>
                    @endforeach
                 </tbody>
