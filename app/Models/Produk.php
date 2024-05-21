@@ -14,7 +14,8 @@ class Produk extends Model
         'kode', 'nama', 'harga_beli', 'harga_jual', 'stok', 'min_stok', 'jenis_produk_id'
     ];
 
-    public function jenis_produk(){
+    public function jenis_produk()
+    {
         return $this->belongsTo(JenisProduk::class);
     }
 }

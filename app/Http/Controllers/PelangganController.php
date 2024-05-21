@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Kartu;
-Use App\Models\Pelanggan;
+use App\Models\Pelanggan;
 
 class PelangganController extends Controller
 {
@@ -16,7 +16,7 @@ class PelangganController extends Controller
     {
         //
         $pelanggan = Pelanggan::all();
-        return view ('admin.pelanggan.index',compact('pelanggan'));
+        return view('admin.pelanggan.index', compact('pelanggan'));
     }
 
     /**
@@ -26,8 +26,8 @@ class PelangganController extends Controller
     {
         //
         $kartu = Kartu::all();
-        $gender = ['L','P'];
-        return view ('admin.pelanggan.create',compact('gender','kartu'));
+        $gender = ['L', 'P'];
+        return view('admin.pelanggan.create', compact('gender', 'kartu'));
     }
 
     /**
@@ -35,6 +35,14 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
+        if (!empty($request->foto)) {
+            // maka proses berikut yang dijalankan
+            $fileName = 'foto-' . uniqid() . '.' . $request->foto->extension();
+            // setelah tau fotonya sudah masuk maka tempatkan ke public
+            $request->foto->move(public_path('admin/images'), $fileName);
+        } else {
+            $fileName = '';
+        }
         //Tambah Data menggunakan eloquent
         $pelanggan = new Pelanggan;
         $pelanggan->kode = $request->kode;
@@ -43,6 +51,7 @@ class PelangganController extends Controller
         $pelanggan->tmp_lahir = $request->tmp_lahir;
         $pelanggan->tgl_lahir = $request->tgl_lahir;
         $pelanggan->email = $request->email;
+        $pelanggan->foto = $fileName;
         $pelanggan->kartu_id = $request->kartu_id;
         $pelanggan->save();
         return redirect('admin/pelanggan');
@@ -65,6 +74,10 @@ class PelangganController extends Controller
     public function edit(string $id)
     {
         //
+        $pl = Pelanggan::find($id);
+        $kartu = Kartu::all();
+        $gender = ['L', 'P'];
+        return view('admin.pelanggan.edit', compact('pl', 'kartu', 'gender'));
     }
 
     /**
@@ -73,6 +86,34 @@ class PelangganController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        //foto lama
+        $fotoLama = Pelanggan::select('foto')->where('id', $id)->get();
+        foreach ($fotoLama as $f1) {
+            $fotoLama = $f1->foto;
+        }
+        //jika foto sudah ada yang terupload
+        if (!empty($request->foto)) {
+            //maka proses selanjutnya
+            if (!empty($fotoLama->foto)) unlink(public_path('admin/images' . $fotoLama->foto));
+            //proses ganti foto
+            $fileName = 'foto-' . $request->id . '.' . $request->foto->extension();
+            //setelah tau fotonya sudah masuk maka tempatkan ke public
+            $request->foto->move(public_path('admin/images'), $fileName);
+        } else {
+            $fileName = $fotoLama;
+        }
+        //tambah data menggunakan eloquent
+        $pelanggan = Pelanggan::find($id);
+        $pelanggan->kode = $request->kode;
+        $pelanggan->nama = $request->nama;
+        $pelanggan->jk = $request->jk;
+        $pelanggan->tmp_lahir = $request->tmp_lahir;
+        $pelanggan->tgl_lahir = $request->tgl_lahir;
+        $pelanggan->email = $request->email;
+        $pelanggan->foto = $fileName;
+        $pelanggan->kartu_id = $request->kartu_id;
+        $pelanggan->save();
+        return redirect('admin/pelanggan');
     }
 
     /**

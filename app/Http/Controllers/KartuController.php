@@ -16,7 +16,7 @@ class KartuController extends Controller
     {
         //
         $kartu = Kartu::all();
-        return view ('admin.kartu.index',compact('kartu'));
+        return view('admin.kartu.index', compact('kartu'));
     }
 
     /**
@@ -43,7 +43,6 @@ class KartuController extends Controller
         // $kartu->updated_at = $request->updated_at;
         $kartu->save();
         return redirect('admin/kartu');
-
     }
 
     /**

@@ -33,24 +33,21 @@ Route::get('/daftar_nilai', function () {
     return view('nilai.daftar_nilai');
 });
 
-Route::get('/dashboard',function(){
+Route::get('/dashboard', function () {
     return view('admin.dashboard');
 });
 
 // prefix and gruoping adalah mengelompokkan routing ke satu jenis route
-Route::prefix('admin')->group(function(){
-// Route memanggil controller setiap fungsi
-// nanti linknya menggunakan url, ada di dalam view
-Route::get('/jenis_produk', [JenisProdukController::class, 'index']);
-Route::post('/jenis_produk/store',[JenisProdukController::class, 'store']);
+Route::prefix('admin')->group(function () {
+    // Route memanggil controller setiap fungsi
+    // nanti linknya menggunakan url, ada di dalam view
+    Route::get('/jenis_produk', [JenisProdukController::class, 'index']);
+    Route::post('/jenis_produk/store', [JenisProdukController::class, 'store']);
 
-// rute dengan pemanggilan class
-Route::resource('produk', ProdukController::class);
-Route::resource('pelanggan', PelangganController::class);
+    // rute dengan pemanggilan class
+    Route::resource('produk', ProdukController::class);
+    Route::resource('pelanggan', PelangganController::class);
 
-Route::get('/kartu',[KartuController::class,'index']);
-Route::post('/kartu/store',[KartuController::class,'store']);
-
+    Route::get('/kartu', [KartuController::class, 'index']);
+    Route::post('/kartu/store', [KartuController::class, 'store']);
 });
-
-

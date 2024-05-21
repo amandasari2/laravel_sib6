@@ -15,7 +15,8 @@ class JenisProduk extends Model
     protected $fillable = ['nama'];
 
     // penanda atau pemanggilan class produk untuk relas one to many
-    public function produk(){
+    public function produk()
+    {
         return $this->hasMany(Produk::class);
     }
 }

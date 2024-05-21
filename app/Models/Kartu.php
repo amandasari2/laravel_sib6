@@ -16,7 +16,8 @@ class Kartu extends Model
     ];
     public $timestamps = false;
 
-    public function pelanggan(){
+    public function pelanggan()
+    {
         return $this->hasMany(Pelanggan::class);
     }
 }

@@ -23,7 +23,7 @@ class JenisProdukController extends Controller
         // untuk kemudian variable tersebut dikirimkan ke view
         $jenis = DB::table('jenis_produk')->get();
         // return view mengarahkan ke view dan compact mengirim variabel ke view
-        return view ('admin.jenis.index', compact('jenis'));
+        return view('admin.jenis.index', compact('jenis'));
         // return view ('admin.jenis.index', ['jenis' => $jenis]);
     }
 
