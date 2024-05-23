@@ -18,9 +18,6 @@
                             <th>No</th>
                             <th>Kode</th>
                             <th>Nama</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Tempat Lahir</th>
-                            <th>Tanggal Lahir</th>
                             <th>Email</th>
                             <th>Kartu</th>
                             <th>Action</th>
@@ -31,9 +28,6 @@
                             <th>No</th>
                             <th>Kode</th>
                             <th>Nama</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Tempat Lahir</th>
-                            <th>Tanggal Lahir</th>
                             <th>Email</th>
                             <th>Kartu</th>
                             <th>Action</th>
@@ -46,9 +40,6 @@
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $p->kode }}</td>
                                 <td>{{ $p->nama }}</td>
-                                <td>{{ $p->jk }}</td>
-                                <td>{{ $p->tmp_lahir }}</td>
-                                <td>{{ $p->tgl_lahir }}</td>
                                 <td>{{ $p->email }}</td>
                                 <td>{{ $p->kartu->nama }}</td>
                                 <td>
@@ -56,6 +47,43 @@
                                         <i class="fa-solid fa-eye"></i></a>
                                     <a href="{{ route('pelanggan.edit', $p->id) }}" class="btn btn-sm btn-warning"><i
                                             class="fa-regular fa-pen-to-square"></i></a>
+
+                                    {{-- Ini Untuk Modal Hapus --}}
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal{{ $p->id }}">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal{{ $p->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Produk</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Apakah Anda Yakin Ingin Menghapus Data {{ $p->nama }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <form action="{{ route('pelanggan.destroy', $p->id) }}" method="POST"
+                                                        style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Akhir Modal Hapus --}}
                                 </td>
                             </tr>
                         @endforeach

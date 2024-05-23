@@ -39,9 +39,35 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'kode' => 'required|unique:produk|max:10',
+                'nama' => 'required|max:45',
+                'harga_beli' => 'required|numeric',
+                'harga_jual' => 'required|numeric',
+                'stok' => 'required|numeric',
+                'min_stok' => 'required|numeric',
+                'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
+            ],
+            [
+                'kode.max' => 'Kode Maksimal 10 Karakter',
+                'kode.required' => 'Kode Wajib Diisi!',
+                'kode.unique' => 'Kode Tidak Boleh Sama',
+                'nama.required' => 'Nama Wajib Diisi!',
+                'nama.max' => 'Nama Maksimal 45 Karakter',
+                'harga_beli.required' => 'Harga Beli Wajib Diisi!',
+                'harga_jual.required' => 'Harga Jual Wajib Diisi!',
+                'stok.required' => 'Stok Wajib Diisi!',
+                'min_stok.required' => 'Minimal Stok Wajib Diisi!',
+                'foto.max' => 'Foto Maksimal 2 MB',
+                'foto.mimes' => 'File Ekstensi Hanya Bisa JPG, JPEG, PNG, GIF, dan SVG',
+                'foto.image' => 'Foto Harus Berbentuk Image',
+            ]
+        );
+
         // proses upload data
         if (!empty($request->foto)) {
-            // maka proses berikut yang dijalankan 
+            // maka proses berikut yang dijalankan
             $fileName = 'foto-' . uniqid() . '.' . $request->foto->extension();
             // setelah tau fotonya sudah masuk maka tempatkan ke public
             $request->foto->move(public_path('admin/images'), $fileName);
@@ -94,14 +120,14 @@ class ProdukController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //foto lama 
+        //foto lama
         $fotoLama = DB::table('produk')->select('foto')->where('id', $id)->get();
         foreach ($fotoLama as $f1) {
             $fotoLama = $f1->foto;
         }
-        // Jika foto sudah ada yang terupload  
+        // Jika foto sudah ada yang terupload
         if (!empty($request->foto)) {
-            // maka proses berikut yang dijalankan 
+            // maka proses berikut yang dijalankan
             if (!empty($fotoLama->foto)) unlink(public_path('admin/images' . $fotoLama->foto));
             $fileName = 'foto-' . uniqid() . '.' . $request->foto->extension();
             // setelah tau fotonya sudah masuk maka tempatkan ke public
@@ -132,5 +158,7 @@ class ProdukController extends Controller
     public function destroy(string $id)
     {
         //
+        DB::table('produk')->where('id', $id)->delete();
+        return redirect('admin/produk');
     }
 }

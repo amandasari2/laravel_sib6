@@ -96,7 +96,7 @@ class PelangganController extends Controller
             //maka proses selanjutnya
             if (!empty($fotoLama->foto)) unlink(public_path('admin/images' . $fotoLama->foto));
             //proses ganti foto
-            $fileName = 'foto-' . $request->id . '.' . $request->foto->extension();
+            $fileName = 'foto-' . uniqid($id) . '.' . $request->foto->extension();
             //setelah tau fotonya sudah masuk maka tempatkan ke public
             $request->foto->move(public_path('admin/images'), $fileName);
         } else {
@@ -122,5 +122,8 @@ class PelangganController extends Controller
     public function destroy(string $id)
     {
         //
+        $pelanggan = Pelanggan::find($id);
+        $pelanggan->delete();
+        return redirect('admin/pelanggan');
     }
 }
