@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\JenisProduk;
 // use DB;
-// library DB ini digunakan ketika menggunakan penulisan QUERY BUILDER
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class ProdukController extends Controller
 {
@@ -17,7 +17,7 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        //index untuk produk
+        // index untuk produk
         $produk = Produk::join('jenis_produk', 'jenis_produk_id', '=', 'jenis_produk.id')
             ->select('produk.*', 'jenis_produk.nama as jenis')
             ->get();
@@ -47,35 +47,32 @@ class ProdukController extends Controller
                 'harga_jual' => 'required|numeric',
                 'stok' => 'required|numeric',
                 'min_stok' => 'required|numeric',
-                'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
+                'foto' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+
             ],
             [
-                'kode.max' => 'Kode Maksimal 10 Karakter',
-                'kode.required' => 'Kode Wajib Diisi!',
-                'kode.unique' => 'Kode Tidak Boleh Sama',
-                'nama.required' => 'Nama Wajib Diisi!',
-                'nama.max' => 'Nama Maksimal 45 Karakter',
-                'harga_beli.required' => 'Harga Beli Wajib Diisi!',
-                'harga_jual.required' => 'Harga Jual Wajib Diisi!',
-                'stok.required' => 'Stok Wajib Diisi!',
-                'min_stok.required' => 'Minimal Stok Wajib Diisi!',
-                'foto.max' => 'Foto Maksimal 2 MB',
-                'foto.mimes' => 'File Ekstensi Hanya Bisa JPG, JPEG, PNG, GIF, dan SVG',
-                'foto.image' => 'Foto Harus Berbentuk Image',
+                'kode.max' => 'Kode maksimal 10 karakter',
+                'kode.required' => 'Kode wajib diisi',
+                'kode.unique' => 'Kode tidak boleh sama',
+                'nama.required' => 'Nama wajib diisi',
+                'nama.max' => 'Nama maksimal 45 karakter',
+                'foto.max' => 'Foto maksimal 2 MB',
+                'foto.mimes' => 'File ekstensi hanya bisa jpg,png,jpeg,gif, svg',
+                'foto.image' => 'File harus berbentuk image'
             ]
-        );
 
-        // proses upload data
+        );
+        //proses upload foto
+        //jika file foto ada yang terupload
         if (!empty($request->foto)) {
-            // maka proses berikut yang dijalankan
+            //maka proses berikut yang dijalankan
             $fileName = 'foto-' . uniqid() . '.' . $request->foto->extension();
-            // setelah tau fotonya sudah masuk maka tempatkan ke public
-            $request->foto->move(public_path('admin/images'), $fileName);
+            //setelah tau fotonya sudah masuk maka tempatkan ke public
+            $request->foto->move(public_path('admin/image'), $fileName);
         } else {
             $fileName = '';
         }
-
-        //Tambah Data Produk
+        //tambah data produk
         DB::table('produk')->insert([
             'kode' => $request->kode,
             'nama' => $request->nama,
@@ -87,6 +84,7 @@ class ProdukController extends Controller
             'foto' => $fileName,
             'jenis_produk_id' => $request->jenis_produk_id,
         ]);
+        Alert::success('Tambah Produk', 'Berhasil Menambahkan produk');
         return redirect('admin/produk');
     }
 
@@ -100,7 +98,6 @@ class ProdukController extends Controller
             ->select('produk.*', 'jenis_produk.nama as jenis')
             ->where('produk.id', $id)
             ->get();
-
         return view('admin.produk.detail', compact('produk'));
     }
 
@@ -120,24 +117,23 @@ class ProdukController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //
         //foto lama
         $fotoLama = DB::table('produk')->select('foto')->where('id', $id)->get();
         foreach ($fotoLama as $f1) {
             $fotoLama = $f1->foto;
         }
-        // Jika foto sudah ada yang terupload
+        //jika foto sudah ada yang terupload
         if (!empty($request->foto)) {
-            // maka proses berikut yang dijalankan
-            if (!empty($fotoLama->foto)) unlink(public_path('admin/images' . $fotoLama->foto));
-            $fileName = 'foto-' . uniqid() . '.' . $request->foto->extension();
-            // setelah tau fotonya sudah masuk maka tempatkan ke public
-            $request->foto->move(public_path('admin/images'), $fileName);
-            // hapus foto lama
-
+            //maka proses selanjutnya
+            if (!empty($fotoLama->foto)) unlink(public_path('admin/image' . $fotoLama->foto));
+            //proses ganti foto
+            $fileName = 'foto-' . $request->id . '.' . $request->foto->extension();
+            //setelah tau fotonya sudah masuk maka tempatkan ke public
+            $request->foto->move(public_path('admin/image'), $fileName);
         } else {
             $fileName = $fotoLama;
         }
-        //Tambah Data Produk
         DB::table('produk')->where('id', $id)->update([
             'kode' => $request->kode,
             'nama' => $request->nama,
@@ -149,6 +145,7 @@ class ProdukController extends Controller
             'foto' => $fileName,
             'jenis_produk_id' => $request->jenis_produk_id,
         ]);
+        Alert::success('Update Produk', 'Berhasil Update produk');
         return redirect('admin/produk');
     }
 
