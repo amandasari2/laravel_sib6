@@ -6,6 +6,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KartuController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Auth;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -33,6 +34,10 @@ Route::get('/daftar_nilai', function () {
 //     return view ('admin.dashboard');
 // });
 
+//middlaware berguna sebagai pembatas atau validasi antara visitor yang
+// sudah memiliki user akses atau belum memiliki akses
+
+Route::group(['middleware' => ['auth', 'role:admin|manager|staff']], function () {
 //prefix and grouping adalah mengelompokkan routing ke satu jenis route
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -48,3 +53,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/kartu', [KartuController::class, 'index']);
     Route::post('/kartu/store', [KartuController::class, 'store']);
 });
+});
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
