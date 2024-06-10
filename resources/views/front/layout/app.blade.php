@@ -12,12 +12,18 @@
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="{{ 'front' }}/css/styles.css" rel="stylesheet" />
+    <link href="{{ asset('front') }}/css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('front') }}/css/style1.css">
+
 </head>
 
 <body>
-    <!-- Navigation-->
     @include('sweetalert::alert')
+    <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="#!">Start Bootstrap</a>
@@ -40,7 +46,7 @@
                             <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                         </ul>
                     </li>
-                    {{-- Logic Login Register --}}
+                    <!-- logic login register -->
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
@@ -73,23 +79,67 @@
                             </div>
                         </li>
                     @endguest
-                    {{-- end Login Register --}}
                 </ul>
-                <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
+                <!-- <form class="d-flex"> -->
+                @auth
+                    <div class="dropdown">
+                        <button class="btn btn-outline-dark" data-toggle="dropdown">
+                            <i class="bi-cart-fill me-1"></i>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">
+                                {{ count((array) session('cart')) }}
+                            </span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="row total-header-section">
+                                <div class="col-lg-6 col-sm-6 col-6">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true">
+                                    </i>
+                                    <span class="badge badge-pill badge-danger">
+                                        {{ count((array) session('cart')) }}</span>
+                                </div>
+                                @php $total = 0 @endphp
+                                @foreach ((array) session('cart') as $id => $details)
+                                    @php $total += $details['harga_jual'] * $details['quantity'] @endphp
+                                @endforeach
+                                <div class="col-lg-6 col-sm-6 col-6 total-section text-right">
+                                    <p>Total: <span class="text-info">Rp. {{ $total }}</span></p>
+                                </div>
+                            </div>
+                            @if (session('cart'))
+                                @foreach (session('cart') as $id => $details)
+                                    <div class="row cart-detail">
+                                        <div class="col-lg-4 col-sm-4 col-4 cart-detail-img">
+                                            @empty($details['foto'])
+                                                <img src="{{ url('admin/images/nophoto.jpg') }}" />
+                                            @else
+                                                <img src="{{ url('admin/images') }}/{{ $details['foto'] }}" />
+                                            @endempty
+                                        </div>
+                                        <div class="col-lg-8 col-sm-8 col-8 cart-detail-product">
+                                            <p>{{ $details['nama'] }}</p>
+                                            <span class="price text-info"> Rp. {{ $details['harga_jual'] }}</span>
+                                            <span class="count"> Quantity:{{ $details['quantity'] }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-12 text-center checkout">
+                                    <a href="#" class="btn btn-primary btn-block">View all</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endauth
+                <!-- </form> -->
             </div>
         </div>
     </nav>
 
     @yield('content')
 
-
-    <!-- Footer-->
+    <!-- ini bagian footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
             <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
@@ -98,7 +148,7 @@
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
-    <script src="{{ 'front' }}/js/scripts.js"></script>
+    <script src="{{ asset('front') }}/js/scripts.js"></script>
 </body>
 
 </html>
