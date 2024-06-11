@@ -32,7 +32,7 @@
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ ('/') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
@@ -125,13 +125,15 @@
                                 @endforeach
                             @endif
                             <div class="row">
-                                <div class="col-lg-12 col-sm-12 col-12 text-center checkout">
-                                    <a href="#" class="btn btn-primary btn-block">View all</a>
-                                </div>
+
+                                <a href="{{ url('shop_cart') }}" class="btn btn-primary ">View all</a>
+
                             </div>
                         </div>
                     </div>
                 @endauth
+
+
                 <!-- </form> -->
             </div>
         </div>
