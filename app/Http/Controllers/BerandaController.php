@@ -29,7 +29,7 @@ class BerandaController extends Controller
         //session library yang menyimpan sebuah history
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
-            //increment penambahan value secara berkala 
+            //increment penambahan value secara berkala
         } else {
             $cart[$id] = [
                 "nama" => $produk->nama,
@@ -57,7 +57,7 @@ class BerandaController extends Controller
         //panggil detail produk yang sudah masuk kedalam cart
         $produk = Produk::all();
         $cart = session()->get('cart');
-        //hitung total harga 
+        //hitung total harga
         $total = 0;
         if ($cart) {
             foreach ($cart as $key => $produk) {
